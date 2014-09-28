@@ -1,3 +1,5 @@
 mp_theory_homepage:
-    pattern:  /hello/{name}
+    pattern:  /theory/{var1}
     defaults: { _controller: MPTheoryBundle:Default:index }
+    requirements:
+        _method:  GET
