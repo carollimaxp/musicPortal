@@ -9,9 +9,9 @@ mp_default_about:
     defaults: { _controller: MPDefaultBundle:Default:about }
     requirements:
         _method:  GET
-
-mp_default_contact:
+        
+mp_theory_contact:
     pattern:  /contact
-    defaults: { _controller: BloggerBlogBundle:Page:contact }
+    defaults: { _controller: MPDefaultBundle:Default:contact }
     requirements:
         _method:  GET
