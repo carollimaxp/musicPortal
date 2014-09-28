@@ -14,39 +14,41 @@ namespace Symfony\Component\Validator\Tests\Constraints;
 use Symfony\Component\Intl\Util\IntlTestHelper;
 use Symfony\Component\Validator\Constraints\Locale;
 use Symfony\Component\Validator\Constraints\LocaleValidator;
-use Symfony\Component\Validator\Validation;
 
-class LocaleValidatorTest extends AbstractConstraintValidatorTest
+class LocaleValidatorTest extends \PHPUnit_Framework_TestCase
 {
-    protected function getApiVersion()
-    {
-        return Validation::API_VERSION_2_5;
-    }
-
-    protected function createValidator()
-    {
-        return new LocaleValidator();
-    }
+    protected $context;
+    protected $validator;
 
     protected function setUp()
     {
         IntlTestHelper::requireIntl($this);
 
-        parent::setUp();
+        $this->context = $this->getMock('Symfony\Component\Validator\ExecutionContext', array(), array(), '', false);
+        $this->validator = new LocaleValidator();
+        $this->validator->initialize($this->context);
+    }
+
+    protected function tearDown()
+    {
+        $this->context = null;
+        $this->validator = null;
     }
 
     public function testNullIsValid()
     {
-        $this->validator->validate(null, new Locale());
+        $this->context->expects($this->never())
+            ->method('addViolation');
 
-        $this->assertNoViolation();
+        $this->validator->validate(null, new Locale());
     }
 
     public function testEmptyStringIsValid()
     {
-        $this->validator->validate('', new Locale());
+        $this->context->expects($this->never())
+            ->method('addViolation');
 
-        $this->assertNoViolation();
+        $this->validator->validate('', new Locale());
     }
 
     /**
@@ -62,9 +64,10 @@ class LocaleValidatorTest extends AbstractConstraintValidatorTest
      */
     public function testValidLocales($locale)
     {
-        $this->validator->validate($locale, new Locale());
+        $this->context->expects($this->never())
+            ->method('addViolation');
 
-        $this->assertNoViolation();
+        $this->validator->validate($locale, new Locale());
     }
 
     public function getValidLocales()
@@ -87,11 +90,13 @@ class LocaleValidatorTest extends AbstractConstraintValidatorTest
             'message' => 'myMessage'
         ));
 
-        $this->validator->validate($locale, $constraint);
+        $this->context->expects($this->once())
+            ->method('addViolation')
+            ->with('myMessage', array(
+                '{{ value }}' => $locale,
+            ));
 
-        $this->assertViolation('myMessage', array(
-            '{{ value }}' => '"'.$locale.'"',
-        ));
+        $this->validator->validate($locale, $constraint);
     }
 
     public function getInvalidLocales()

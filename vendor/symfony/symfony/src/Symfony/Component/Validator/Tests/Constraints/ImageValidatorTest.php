@@ -13,9 +13,8 @@ namespace Symfony\Component\Validator\Tests\Constraints;
 
 use Symfony\Component\Validator\Constraints\Image;
 use Symfony\Component\Validator\Constraints\ImageValidator;
-use Symfony\Component\Validator\Validation;
 
-class ImageValidatorTest extends AbstractConstraintValidatorTest
+class ImageValidatorTest extends \PHPUnit_Framework_TestCase
 {
     protected $context;
     protected $validator;
@@ -24,20 +23,11 @@ class ImageValidatorTest extends AbstractConstraintValidatorTest
     protected $imageLandscape;
     protected $imagePortrait;
 
-    protected function getApiVersion()
-    {
-        return Validation::API_VERSION_2_5;
-    }
-
-    protected function createValidator()
-    {
-        return new ImageValidator();
-    }
-
     protected function setUp()
     {
-        parent::setUp();
-
+        $this->context = $this->getMock('Symfony\Component\Validator\ExecutionContext', array(), array(), '', false);
+        $this->validator = new ImageValidator();
+        $this->validator->initialize($this->context);
         $this->image = __DIR__.'/Fixtures/test.gif';
         $this->imageLandscape = __DIR__.'/Fixtures/test_landscape.gif';
         $this->imagePortrait = __DIR__.'/Fixtures/test_portrait.gif';
@@ -45,27 +35,33 @@ class ImageValidatorTest extends AbstractConstraintValidatorTest
 
     public function testNullIsValid()
     {
-        $this->validator->validate(null, new Image());
+        $this->context->expects($this->never())
+            ->method('addViolation');
 
-        $this->assertNoViolation();
+        $this->validator->validate(null, new Image());
     }
 
     public function testEmptyStringIsValid()
     {
-        $this->validator->validate('', new Image());
+        $this->context->expects($this->never())
+            ->method('addViolation');
 
-        $this->assertNoViolation();
+        $this->validator->validate('', new Image());
     }
 
     public function testValidImage()
     {
-        $this->validator->validate($this->image, new Image());
+        $this->context->expects($this->never())
+            ->method('addViolation');
 
-        $this->assertNoViolation();
+        $this->validator->validate($this->image, new Image());
     }
 
     public function testValidSize()
     {
+        $this->context->expects($this->never())
+            ->method('addViolation');
+
         $constraint = new Image(array(
             'minWidth' => 1,
             'maxWidth' => 2,
@@ -74,8 +70,6 @@ class ImageValidatorTest extends AbstractConstraintValidatorTest
         ));
 
         $this->validator->validate($this->image, $constraint);
-
-        $this->assertNoViolation();
     }
 
     public function testWidthTooSmall()
@@ -85,12 +79,14 @@ class ImageValidatorTest extends AbstractConstraintValidatorTest
             'minWidthMessage' => 'myMessage',
         ));
 
-        $this->validator->validate($this->image, $constraint);
+        $this->context->expects($this->once())
+            ->method('addViolation')
+            ->with('myMessage', array(
+                '{{ width }}' => '2',
+                '{{ min_width }}' => '3',
+            ));
 
-        $this->assertViolation('myMessage', array(
-            '{{ width }}' => '2',
-            '{{ min_width }}' => '3',
-        ));
+        $this->validator->validate($this->image, $constraint);
     }
 
     public function testWidthTooBig()
@@ -100,12 +96,14 @@ class ImageValidatorTest extends AbstractConstraintValidatorTest
             'maxWidthMessage' => 'myMessage',
         ));
 
-        $this->validator->validate($this->image, $constraint);
+        $this->context->expects($this->once())
+            ->method('addViolation')
+            ->with('myMessage', array(
+                '{{ width }}' => '2',
+                '{{ max_width }}' => '1',
+            ));
 
-        $this->assertViolation('myMessage', array(
-            '{{ width }}' => '2',
-            '{{ max_width }}' => '1',
-        ));
+        $this->validator->validate($this->image, $constraint);
     }
 
     public function testHeightTooSmall()
@@ -115,12 +113,14 @@ class ImageValidatorTest extends AbstractConstraintValidatorTest
             'minHeightMessage' => 'myMessage',
         ));
 
-        $this->validator->validate($this->image, $constraint);
+        $this->context->expects($this->once())
+            ->method('addViolation')
+            ->with('myMessage', array(
+                '{{ height }}' => '2',
+                '{{ min_height }}' => '3',
+            ));
 
-        $this->assertViolation('myMessage', array(
-            '{{ height }}' => '2',
-            '{{ min_height }}' => '3',
-        ));
+        $this->validator->validate($this->image, $constraint);
     }
 
     public function testHeightTooBig()
@@ -130,12 +130,14 @@ class ImageValidatorTest extends AbstractConstraintValidatorTest
             'maxHeightMessage' => 'myMessage',
         ));
 
-        $this->validator->validate($this->image, $constraint);
+        $this->context->expects($this->once())
+            ->method('addViolation')
+            ->with('myMessage', array(
+                '{{ height }}' => '2',
+                '{{ max_height }}' => '1',
+            ));
 
-        $this->assertViolation('myMessage', array(
-            '{{ height }}' => '2',
-            '{{ max_height }}' => '1',
-        ));
+        $this->validator->validate($this->image, $constraint);
     }
 
     /**
@@ -193,12 +195,14 @@ class ImageValidatorTest extends AbstractConstraintValidatorTest
             'minRatioMessage' => 'myMessage',
         ));
 
-        $this->validator->validate($this->image, $constraint);
+        $this->context->expects($this->once())
+            ->method('addViolation')
+            ->with('myMessage', array(
+                '{{ ratio }}' => 1,
+                '{{ min_ratio }}' => 2,
+            ));
 
-        $this->assertViolation('myMessage', array(
-            '{{ ratio }}' => 1,
-            '{{ min_ratio }}' => 2,
-        ));
+        $this->validator->validate($this->image, $constraint);
     }
 
     public function testRatioTooBig()
@@ -208,12 +212,14 @@ class ImageValidatorTest extends AbstractConstraintValidatorTest
             'maxRatioMessage' => 'myMessage',
         ));
 
-        $this->validator->validate($this->image, $constraint);
+        $this->context->expects($this->once())
+            ->method('addViolation')
+            ->with('myMessage', array(
+                '{{ ratio }}' => 1,
+                '{{ max_ratio }}' => 0.5,
+            ));
 
-        $this->assertViolation('myMessage', array(
-            '{{ ratio }}' => 1,
-            '{{ max_ratio }}' => 0.5,
-        ));
+        $this->validator->validate($this->image, $constraint);
     }
 
     /**
@@ -247,12 +253,14 @@ class ImageValidatorTest extends AbstractConstraintValidatorTest
             'allowSquareMessage' => 'myMessage',
         ));
 
-        $this->validator->validate($this->image, $constraint);
+        $this->context->expects($this->once())
+            ->method('addViolation')
+            ->with('myMessage', array(
+                '{{ width }}' => 2,
+                '{{ height }}' => 2,
+            ));
 
-        $this->assertViolation('myMessage', array(
-            '{{ width }}' => 2,
-            '{{ height }}' => 2,
-        ));
+        $this->validator->validate($this->image, $constraint);
     }
 
     public function testLandscapeNotAllowed()
@@ -262,12 +270,14 @@ class ImageValidatorTest extends AbstractConstraintValidatorTest
             'allowLandscapeMessage' => 'myMessage',
         ));
 
-        $this->validator->validate($this->imageLandscape, $constraint);
+        $this->context->expects($this->once())
+            ->method('addViolation')
+            ->with('myMessage', array(
+                '{{ width }}' => 2,
+                '{{ height }}' => 1,
+            ));
 
-        $this->assertViolation('myMessage', array(
-            '{{ width }}' => 2,
-            '{{ height }}' => 1,
-        ));
+        $this->validator->validate($this->imageLandscape, $constraint);
     }
 
     public function testPortraitNotAllowed()
@@ -277,11 +287,13 @@ class ImageValidatorTest extends AbstractConstraintValidatorTest
             'allowPortraitMessage' => 'myMessage',
         ));
 
-        $this->validator->validate($this->imagePortrait, $constraint);
+        $this->context->expects($this->once())
+            ->method('addViolation')
+            ->with('myMessage', array(
+                '{{ width }}' => 1,
+                '{{ height }}' => 2,
+            ));
 
-        $this->assertViolation('myMessage', array(
-            '{{ width }}' => 1,
-            '{{ height }}' => 2,
-        ));
+        $this->validator->validate($this->imagePortrait, $constraint);
     }
 }

@@ -57,7 +57,7 @@
             <logout />
         </firewall>
 
-        <firewall name="host" pattern="/test" host="foo\.example\.org" methods="GET,POST">
+        <firewall name="host" pattern="/test" host="foo\.example\.org">
             <anonymous />
             <http-basic />
         </firewall>

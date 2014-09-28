@@ -17,6 +17,7 @@ use Symfony\Component\DependencyInjection\Parameter;
 use Symfony\Bundle\SecurityBundle\SecurityBundle;
 use Symfony\Bundle\SecurityBundle\DependencyInjection\SecurityExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\ExpressionLanguage\Expression;
 
 abstract class CompleteConfigurationTest extends \PHPUnit_Framework_TestCase
 {
@@ -116,7 +117,6 @@ abstract class CompleteConfigurationTest extends \PHPUnit_Framework_TestCase
             array(
                 '/test',
                 'foo\\.example\\.org',
-                array('GET', 'POST'),
             ),
         ), $matchers);
     }

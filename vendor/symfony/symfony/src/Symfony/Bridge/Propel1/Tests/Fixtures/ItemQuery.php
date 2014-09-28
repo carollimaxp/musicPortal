@@ -18,7 +18,6 @@ class ItemQuery
         'value'         => \PropelColumnTypes::VARCHAR,
         'price'         => \PropelColumnTypes::FLOAT,
         'is_active'     => \PropelColumnTypes::BOOLEAN,
-        'slug'          => \PropelColumnTypes::VARCHAR,
         'enabled'       => \PropelColumnTypes::BOOLEAN_EMU,
         'updated_at'    => \PropelColumnTypes::TIMESTAMP,
     );

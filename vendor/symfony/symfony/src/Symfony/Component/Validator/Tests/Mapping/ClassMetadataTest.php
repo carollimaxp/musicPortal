@@ -14,6 +14,8 @@ namespace Symfony\Component\Validator\Tests\Mapping;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\Valid;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
+use Symfony\Component\Validator\Exception\GroupDefinitionException;
+use Symfony\Component\Validator\Tests\Fixtures\Entity;
 use Symfony\Component\Validator\Tests\Fixtures\ConstraintA;
 use Symfony\Component\Validator\Tests\Fixtures\ConstraintB;
 use Symfony\Component\Validator\Tests\Fixtures\PropertyConstraint;
@@ -219,21 +221,5 @@ class ClassMetadataTest extends \PHPUnit_Framework_TestCase
         $metadata = new ClassMetadata(self::PROVIDERCLASS);
         $metadata->setGroupSequenceProvider(true);
         $this->assertTrue($metadata->isGroupSequenceProvider());
-    }
-
-    /**
-     * https://github.com/symfony/symfony/issues/11604
-     */
-    public function testGetMemberMetadatasReturnsEmptyArrayWithoutConfiguredMetadata()
-    {
-        $this->assertCount(0, $this->metadata->getMemberMetadatas('foo'), '->getMemberMetadatas() returns an empty collection if no metadata is configured for the given property');
-    }
-
-    /**
-     * https://github.com/symfony/symfony/issues/11604
-     */
-    public function testGetPropertyMetadataReturnsEmptyArrayWithoutConfiguredMetadata()
-    {
-        $this->assertCount(0, $this->metadata->getPropertyMetadata('foo'), '->getPropertyMetadata() returns an empty collection if no metadata is configured for the given property');
     }
 }

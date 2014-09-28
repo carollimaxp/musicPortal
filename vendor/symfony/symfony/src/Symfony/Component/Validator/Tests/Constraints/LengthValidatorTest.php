@@ -13,32 +13,39 @@ namespace Symfony\Component\Validator\Tests\Constraints;
 
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\LengthValidator;
-use Symfony\Component\Validator\Validation;
 
-class LengthValidatorTest extends AbstractConstraintValidatorTest
+class LengthValidatorTest extends \PHPUnit_Framework_TestCase
 {
-    protected function getApiVersion()
+    protected $context;
+    protected $validator;
+
+    protected function setUp()
     {
-        return Validation::API_VERSION_2_5;
+        $this->context = $this->getMock('Symfony\Component\Validator\ExecutionContext', array(), array(), '', false);
+        $this->validator = new LengthValidator();
+        $this->validator->initialize($this->context);
     }
 
-    protected function createValidator()
+    protected function tearDown()
     {
-        return new LengthValidator();
+        $this->context = null;
+        $this->validator = null;
     }
 
     public function testNullIsValid()
     {
-        $this->validator->validate(null, new Length(6));
+        $this->context->expects($this->never())
+            ->method('addViolation');
 
-        $this->assertNoViolation();
+        $this->validator->validate(null, new Length(6));
     }
 
     public function testEmptyStringIsValid()
     {
-        $this->validator->validate('', new Length(6));
+        $this->context->expects($this->never())
+            ->method('addViolation');
 
-        $this->assertNoViolation();
+        $this->validator->validate('', new Length(6));
     }
 
     /**
@@ -104,10 +111,11 @@ class LengthValidatorTest extends AbstractConstraintValidatorTest
             $this->markTestSkipped('mb_strlen does not exist');
         }
 
+        $this->context->expects($this->never())
+            ->method('addViolation');
+
         $constraint = new Length(array('min' => 5));
         $this->validator->validate($value, $constraint);
-
-        $this->assertNoViolation();
     }
 
     /**
@@ -119,10 +127,11 @@ class LengthValidatorTest extends AbstractConstraintValidatorTest
             $this->markTestSkipped('mb_strlen does not exist');
         }
 
+        $this->context->expects($this->never())
+            ->method('addViolation');
+
         $constraint = new Length(array('max' => 3));
         $this->validator->validate($value, $constraint);
-
-        $this->assertNoViolation();
     }
 
     /**
@@ -134,10 +143,11 @@ class LengthValidatorTest extends AbstractConstraintValidatorTest
             $this->markTestSkipped('mb_strlen does not exist');
         }
 
+        $this->context->expects($this->never())
+            ->method('addViolation');
+
         $constraint = new Length(4);
         $this->validator->validate($value, $constraint);
-
-        $this->assertNoViolation();
     }
 
     /**
@@ -154,12 +164,14 @@ class LengthValidatorTest extends AbstractConstraintValidatorTest
             'minMessage' => 'myMessage'
         ));
 
-        $this->validator->validate($value, $constraint);
+        $this->context->expects($this->once())
+            ->method('addViolation')
+            ->with('myMessage', $this->identicalTo(array(
+                '{{ value }}' => (string) $value,
+                '{{ limit }}' => 4,
+            )), $this->identicalTo($value), 4);
 
-        $this->assertViolation('myMessage', array(
-            '{{ value }}' => '"'.$value.'"',
-            '{{ limit }}' => 4,
-        ), 'property.path', $value, 4);
+        $this->validator->validate($value, $constraint);
     }
 
     /**
@@ -176,12 +188,14 @@ class LengthValidatorTest extends AbstractConstraintValidatorTest
             'maxMessage' => 'myMessage'
         ));
 
-        $this->validator->validate($value, $constraint);
+        $this->context->expects($this->once())
+            ->method('addViolation')
+            ->with('myMessage', $this->identicalTo(array(
+                '{{ value }}' => (string) $value,
+                '{{ limit }}' => 4,
+            )), $this->identicalTo($value), 4);
 
-        $this->assertViolation('myMessage', array(
-            '{{ value }}' => '"'.$value.'"',
-            '{{ limit }}' => 4,
-        ), 'property.path', $value, 4);
+        $this->validator->validate($value, $constraint);
     }
 
     /**
@@ -199,12 +213,14 @@ class LengthValidatorTest extends AbstractConstraintValidatorTest
             'exactMessage' => 'myMessage'
         ));
 
-        $this->validator->validate($value, $constraint);
+        $this->context->expects($this->once())
+            ->method('addViolation')
+            ->with('myMessage', $this->identicalTo(array(
+                '{{ value }}' => (string) $value,
+                '{{ limit }}' => 4,
+            )), $this->identicalTo($value), 4);
 
-        $this->assertViolation('myMessage', array(
-            '{{ value }}' => '"'.$value.'"',
-            '{{ limit }}' => 4,
-        ), 'property.path', $value, 4);
+        $this->validator->validate($value, $constraint);
     }
 
     public function testConstraintGetDefaultOption()

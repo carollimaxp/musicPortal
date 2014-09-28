@@ -277,14 +277,6 @@ class TextDescriptor extends Descriptor
     }
 
     /**
-     * {@inheritdoc}
-     */
-    protected function describeContainerParameter($parameter, array $options = array())
-    {
-        $this->writeText($this->formatParameter($parameter), $options);
-    }
-
-    /**
      * @param array $array
      *
      * @return string

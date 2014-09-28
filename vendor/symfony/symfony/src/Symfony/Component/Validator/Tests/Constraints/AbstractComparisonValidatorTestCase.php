@@ -11,8 +11,8 @@
 
 namespace Symfony\Component\Validator\Tests\Constraints;
 
-use Symfony\Component\Intl\Util\IntlTestHelper;
 use Symfony\Component\Validator\Constraint;
+use Symfony\Component\Validator\Constraints\AbstractComparisonValidator;
 
 class ComparisonTest_Class
 {
@@ -32,15 +32,30 @@ class ComparisonTest_Class
 /**
  * @author Daniel Holmes <daniel@danielholmes.org>
  */
-abstract class AbstractComparisonValidatorTestCase extends AbstractConstraintValidatorTest
+abstract class AbstractComparisonValidatorTestCase extends \PHPUnit_Framework_TestCase
 {
+    private $validator;
+    private $context;
+
+    protected function setUp()
+    {
+        $this->validator = $this->createValidator();
+        $this->context = $this->getMockBuilder('Symfony\Component\Validator\ExecutionContext')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->validator->initialize($this->context);
+    }
+
     /**
-     * @expectedException \Symfony\Component\Validator\Exception\ConstraintDefinitionException
+     * @return AbstractComparisonValidator
      */
+    abstract protected function createValidator();
+
     public function testThrowsConstraintExceptionIfNoValueOrProperty()
     {
-        $comparison = $this->createConstraint(array());
+        $this->setExpectedException('Symfony\Component\Validator\Exception\ConstraintDefinitionException');
 
+        $comparison = $this->createConstraint(array());
         $this->validator->validate('some value', $comparison);
     }
 
@@ -51,11 +66,16 @@ abstract class AbstractComparisonValidatorTestCase extends AbstractConstraintVal
      */
     public function testValidComparisonToValue($dirtyValue, $comparisonValue)
     {
+        $this->context->expects($this->never())
+            ->method('addViolation');
+
         $constraint = $this->createConstraint(array('value' => $comparisonValue));
 
-        $this->validator->validate($dirtyValue, $constraint);
+        $this->context->expects($this->any())
+            ->method('getPropertyPath')
+            ->will($this->returnValue('property1'));
 
-        $this->assertNoViolation();
+        $this->validator->validate($dirtyValue, $constraint);
     }
 
     /**
@@ -66,29 +86,28 @@ abstract class AbstractComparisonValidatorTestCase extends AbstractConstraintVal
     /**
      * @dataProvider provideInvalidComparisons
      * @param mixed  $dirtyValue
-     * @param mixed  $dirtyValueAsString
      * @param mixed  $comparedValue
      * @param mixed  $comparedValueString
      * @param string $comparedValueType
      */
-    public function testInvalidComparisonToValue($dirtyValue, $dirtyValueAsString, $comparedValue, $comparedValueString, $comparedValueType)
+    public function testInvalidComparisonToValue($dirtyValue, $comparedValue, $comparedValueString, $comparedValueType)
     {
-        // Conversion of dates to string differs between ICU versions
-        // Make sure we have the correct version loaded
-        if ($dirtyValue instanceof \DateTime) {
-            IntlTestHelper::requireIntl($this);
-        }
-
         $constraint = $this->createConstraint(array('value' => $comparedValue));
         $constraint->message = 'Constraint Message';
 
-        $this->validator->validate($dirtyValue, $constraint);
+        $this->context->expects($this->any())
+            ->method('getPropertyPath')
+            ->will($this->returnValue('property1'));
 
-        $this->assertViolation('Constraint Message', array(
-            '{{ value }}' => $dirtyValueAsString,
-            '{{ compared_value }}' => $comparedValueString,
-            '{{ compared_value_type }}' => $comparedValueType
-        ));
+        $this->context->expects($this->once())
+            ->method('addViolation')
+            ->with('Constraint Message', array(
+                '{{ value }}' => $comparedValueString,
+                '{{ compared_value }}' => $comparedValueString,
+                '{{ compared_value_type }}' => $comparedValueType
+            ));
+
+        $this->validator->validate($dirtyValue, $constraint);
     }
 
     /**

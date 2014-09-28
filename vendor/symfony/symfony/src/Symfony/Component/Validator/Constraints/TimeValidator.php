@@ -29,10 +29,6 @@ class TimeValidator extends ConstraintValidator
      */
     public function validate($value, Constraint $constraint)
     {
-        if (!$constraint instanceof Time) {
-            throw new UnexpectedTypeException($constraint, __NAMESPACE__.'\Time');
-        }
-
         if (null === $value || '' === $value || $value instanceof \DateTime) {
             return;
         }
@@ -44,9 +40,7 @@ class TimeValidator extends ConstraintValidator
         $value = (string) $value;
 
         if (!preg_match(static::PATTERN, $value)) {
-            $this->context->addViolation($constraint->message, array(
-                '{{ value }}' => $this->formatValue($value),
-            ));
+            $this->context->addViolation($constraint->message, array('{{ value }}' => $value));
         }
     }
 }

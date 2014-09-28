@@ -140,6 +140,7 @@ class ResolvedFormType implements ResolvedFormTypeInterface
         $this->innerType->buildForm($builder, $options);
 
         foreach ($this->typeExtensions as $extension) {
+            /* @var FormTypeExtensionInterface $extension */
             $extension->buildForm($builder, $options);
         }
     }
@@ -162,6 +163,7 @@ class ResolvedFormType implements ResolvedFormTypeInterface
         $this->innerType->buildView($view, $form, $options);
 
         foreach ($this->typeExtensions as $extension) {
+            /* @var FormTypeExtensionInterface $extension */
             $extension->buildView($view, $form, $options);
         }
     }
@@ -206,6 +208,7 @@ class ResolvedFormType implements ResolvedFormTypeInterface
             $this->innerType->setDefaultOptions($this->optionsResolver);
 
             foreach ($this->typeExtensions as $extension) {
+                /* @var FormTypeExtensionInterface $extension */
                 $extension->setDefaultOptions($this->optionsResolver);
             }
         }

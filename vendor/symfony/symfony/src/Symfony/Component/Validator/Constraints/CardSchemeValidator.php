@@ -13,7 +13,6 @@ namespace Symfony\Component\Validator\Constraints;
 
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
-use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
 /**
  * Validates that a card number belongs to a specified scheme.
@@ -104,18 +103,12 @@ class CardSchemeValidator extends ConstraintValidator
      */
     public function validate($value, Constraint $constraint)
     {
-        if (!$constraint instanceof CardScheme) {
-            throw new UnexpectedTypeException($constraint, __NAMESPACE__.'\CardScheme');
-        }
-
         if (null === $value || '' === $value) {
             return;
         }
 
         if (!is_numeric($value)) {
-            $this->context->addViolation($constraint->message, array(
-                '{{ value }}' => $this->formatValue($value),
-            ));
+            $this->context->addViolation($constraint->message);
 
             return;
         }
@@ -131,8 +124,6 @@ class CardSchemeValidator extends ConstraintValidator
             }
         }
 
-        $this->context->addViolation($constraint->message, array(
-            '{{ value }}' => $this->formatValue($value),
-        ));
+        $this->context->addViolation($constraint->message);
     }
 }

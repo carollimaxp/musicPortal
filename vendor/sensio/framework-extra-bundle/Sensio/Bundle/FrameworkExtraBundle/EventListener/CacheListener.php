@@ -1,5 +1,11 @@
 <?php
 
+namespace Sensio\Bundle\FrameworkExtraBundle\EventListener;
+
+use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+
 /*
  * This file is part of the Symfony framework.
  *
@@ -9,16 +15,10 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Sensio\Bundle\FrameworkExtraBundle\EventListener;
-
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
-use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-
 /**
  * CacheListener handles HTTP cache headers.
  *
- * It can be configured via the Cache, LastModified, and Etag annotations.
+ * It can be configured via the @Cache, @LastModified, and @Etag annotations.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  *

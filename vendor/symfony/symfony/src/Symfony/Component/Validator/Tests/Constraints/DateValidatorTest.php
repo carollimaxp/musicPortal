@@ -13,39 +13,47 @@ namespace Symfony\Component\Validator\Tests\Constraints;
 
 use Symfony\Component\Validator\Constraints\Date;
 use Symfony\Component\Validator\Constraints\DateValidator;
-use Symfony\Component\Validator\Validation;
 
-class DateValidatorTest extends AbstractConstraintValidatorTest
+class DateValidatorTest extends \PHPUnit_Framework_TestCase
 {
-    protected function getApiVersion()
+    protected $context;
+    protected $validator;
+
+    protected function setUp()
     {
-        return Validation::API_VERSION_2_5;
+        $this->context = $this->getMock('Symfony\Component\Validator\ExecutionContext', array(), array(), '', false);
+        $this->validator = new DateValidator();
+        $this->validator->initialize($this->context);
     }
 
-    protected function createValidator()
+    protected function tearDown()
     {
-        return new DateValidator();
+        $this->context = null;
+        $this->validator = null;
     }
 
     public function testNullIsValid()
     {
-        $this->validator->validate(null, new Date());
+        $this->context->expects($this->never())
+            ->method('addViolation');
 
-        $this->assertNoViolation();
+        $this->validator->validate(null, new Date());
     }
 
     public function testEmptyStringIsValid()
     {
-        $this->validator->validate('', new Date());
+        $this->context->expects($this->never())
+            ->method('addViolation');
 
-        $this->assertNoViolation();
+        $this->validator->validate('', new Date());
     }
 
     public function testDateTimeClassIsValid()
     {
-        $this->validator->validate(new \DateTime(), new Date());
+        $this->context->expects($this->never())
+            ->method('addViolation');
 
-        $this->assertNoViolation();
+        $this->validator->validate(new \DateTime(), new Date());
     }
 
     /**
@@ -61,9 +69,10 @@ class DateValidatorTest extends AbstractConstraintValidatorTest
      */
     public function testValidDates($date)
     {
-        $this->validator->validate($date, new Date());
+        $this->context->expects($this->never())
+            ->method('addViolation');
 
-        $this->assertNoViolation();
+        $this->validator->validate($date, new Date());
     }
 
     public function getValidDates()
@@ -84,11 +93,13 @@ class DateValidatorTest extends AbstractConstraintValidatorTest
             'message' => 'myMessage'
         ));
 
-        $this->validator->validate($date, $constraint);
+        $this->context->expects($this->once())
+            ->method('addViolation')
+            ->with('myMessage', array(
+                '{{ value }}' => $date,
+            ));
 
-        $this->assertViolation('myMessage', array(
-            '{{ value }}' => '"'.$date.'"',
-        ));
+        $this->validator->validate($date, $constraint);
     }
 
     public function getInvalidDates()

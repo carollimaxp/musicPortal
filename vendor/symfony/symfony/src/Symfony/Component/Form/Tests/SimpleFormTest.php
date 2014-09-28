@@ -170,28 +170,34 @@ class SimpleFormTest extends AbstractFormTest
         $this->assertFalse($child->isRequired());
     }
 
-    /**
-     * @dataProvider getDisabledStates
-     */
-    public function testAlwaysDisabledIfParentDisabled($parentDisabled, $disabled, $result)
+    public function testAlwaysDisabledIfParentDisabled()
     {
-        $parent = $this->getBuilder()->setDisabled($parentDisabled)->getForm();
-        $child = $this->getBuilder()->setDisabled($disabled)->getForm();
+        $parent = $this->getBuilder()->setDisabled(true)->getForm();
+        $child = $this->getBuilder()->setDisabled(false)->getForm();
 
         $child->setParent($parent);
 
-        $this->assertSame($result, $child->isDisabled());
+        $this->assertTrue($child->isDisabled());
     }
 
-    public function getDisabledStates()
+    public function testDisabled()
     {
-        return array(
-            // parent, button, result
-            array(true, true, true),
-            array(true, false, true),
-            array(false, true, true),
-            array(false, false, false),
-        );
+        $parent = $this->getBuilder()->setDisabled(false)->getForm();
+        $child = $this->getBuilder()->setDisabled(true)->getForm();
+
+        $child->setParent($parent);
+
+        $this->assertTrue($child->isDisabled());
+    }
+
+    public function testNotDisabled()
+    {
+        $parent = $this->getBuilder()->setDisabled(false)->getForm();
+        $child = $this->getBuilder()->setDisabled(false)->getForm();
+
+        $child->setParent($parent);
+
+        $this->assertFalse($child->isDisabled());
     }
 
     public function testGetRootReturnsRootOfParent()
@@ -658,7 +664,7 @@ class SimpleFormTest extends AbstractFormTest
         $this->form->addError(new FormError('Error!'));
         $this->form->submit('foobar');
 
-        $this->assertCount(0, $this->form->getErrors());
+        $this->assertSame(array(), $this->form->getErrors());
     }
 
     public function testCreateView()

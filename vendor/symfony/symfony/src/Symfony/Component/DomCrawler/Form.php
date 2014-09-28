@@ -11,7 +11,6 @@
 
 namespace Symfony\Component\DomCrawler;
 
-use Symfony\Component\DomCrawler\Field\ChoiceFormField;
 use Symfony\Component\DomCrawler\Field\FormField;
 
 /**
@@ -24,7 +23,7 @@ use Symfony\Component\DomCrawler\Field\FormField;
 class Form extends Link implements \ArrayAccess
 {
     /**
-     * @var \DOMElement
+     * @var \DOMNode
      */
     private $button;
 
@@ -36,15 +35,15 @@ class Form extends Link implements \ArrayAccess
     /**
      * Constructor.
      *
-     * @param \DOMElement $node       A \DOMElement instance
-     * @param string      $currentUri The URI of the page where the form is embedded
-     * @param string      $method     The method to use for the link (if null, it defaults to the method defined by the form)
+     * @param \DOMNode $node       A \DOMNode instance
+     * @param string   $currentUri The URI of the page where the form is embedded
+     * @param string   $method     The method to use for the link (if null, it defaults to the method defined by the form)
      *
      * @throws \LogicException if the node is not a button inside a form tag
      *
      * @api
      */
-    public function __construct(\DOMElement $node, $currentUri, $method = null)
+    public function __construct(\DOMNode $node, $currentUri, $method = null)
     {
         parent::__construct($node, $currentUri, $method);
 
@@ -54,7 +53,7 @@ class Form extends Link implements \ArrayAccess
     /**
      * Gets the form node associated with this form.
      *
-     * @return \DOMElement A \DOMElement instance
+     * @return \DOMNode A \DOMNode instance
      */
     public function getFormNode()
     {
@@ -147,11 +146,9 @@ class Form extends Link implements \ArrayAccess
         $values = array();
         foreach ($this->getValues() as $name => $value) {
             $qs = http_build_query(array($name => $value), '', '&');
-            if (!empty($qs)) {
-                parse_str($qs, $expandedValue);
-                $varName = substr($name, 0, strlen(key($expandedValue)));
-                $values = array_replace_recursive($values, array($varName => current($expandedValue)));
-            }
+            parse_str($qs, $expandedValue);
+            $varName = substr($name, 0, strlen(key($expandedValue)));
+            $values = array_replace_recursive($values, array($varName => current($expandedValue)));
         }
 
         return $values;
@@ -172,11 +169,9 @@ class Form extends Link implements \ArrayAccess
         $values = array();
         foreach ($this->getFiles() as $name => $value) {
             $qs = http_build_query(array($name => $value), '', '&');
-            if (!empty($qs)) {
-                parse_str($qs, $expandedValue);
-                $varName = substr($name, 0, strlen(key($expandedValue)));
-                $values = array_replace_recursive($values, array($varName => current($expandedValue)));
-            }
+            parse_str($qs, $expandedValue);
+            $varName = substr($name, 0, strlen(key($expandedValue)));
+            $values = array_replace_recursive($values, array($varName => current($expandedValue)));
         }
 
         return $values;
@@ -364,13 +359,13 @@ class Form extends Link implements \ArrayAccess
     /**
      * Sets the node for the form.
      *
-     * Expects a 'submit' button \DOMElement and finds the corresponding form element, or the form element itself.
+     * Expects a 'submit' button \DOMNode and finds the corresponding form element.
      *
-     * @param \DOMElement $node A \DOMElement instance
+     * @param \DOMNode $node A \DOMNode instance
      *
      * @throws \LogicException If given node is not a button or input or does not have a form ancestor
      */
-    protected function setNode(\DOMElement $node)
+    protected function setNode(\DOMNode $node)
     {
         $this->button = $node;
         if ('button' === $node->nodeName || ('input' === $node->nodeName && in_array(strtolower($node->getAttribute('type')), array('submit', 'button', 'image')))) {
@@ -451,7 +446,7 @@ class Form extends Link implements \ArrayAccess
         }
     }
 
-    private function addField(\DOMElement $node)
+    private function addField(\DOMNode $node)
     {
         if (!$node->hasAttribute('name') || !$node->getAttribute('name')) {
             return;
@@ -461,9 +456,7 @@ class Form extends Link implements \ArrayAccess
         if ('select' == $nodeName || 'input' == $nodeName && 'checkbox' == strtolower($node->getAttribute('type'))) {
             $this->set(new Field\ChoiceFormField($node));
         } elseif ('input' == $nodeName && 'radio' == strtolower($node->getAttribute('type'))) {
-            // there may be other fields with the same name that are no choice
-            // fields already registered (see https://github.com/symfony/symfony/issues/11689)
-            if ($this->has($node->getAttribute('name')) && $this->get($node->getAttribute('name')) instanceof ChoiceFormField) {
+            if ($this->has($node->getAttribute('name'))) {
                 $this->get($node->getAttribute('name'))->addChoice($node);
             } else {
                 $this->set(new Field\ChoiceFormField($node));
