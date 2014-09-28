@@ -10,8 +10,8 @@ mp_default_about:
     requirements:
         _method:  GET
         
-mp_theory_contact:
+mp_default_contact:
     pattern:  /contact
     defaults: { _controller: MPDefaultBundle:Default:contact }
     requirements:
-        _method:  GET
+        _method:  GET|POST
