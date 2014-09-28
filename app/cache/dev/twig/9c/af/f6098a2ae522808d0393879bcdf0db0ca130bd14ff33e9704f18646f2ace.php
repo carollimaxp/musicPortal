@@ -53,16 +53,16 @@ class __TwigTemplate_9caff6098a2ae522808d0393879bcdf0db0ca130bd14ff33e9704f18646
                     ";
         // line 22
         $this->displayBlock('navigation', $context, $blocks);
-        // line 33
+        // line 32
         echo "                </div>
 
                 <hgroup>
                     <h2>";
-        // line 36
+        // line 35
         $this->displayBlock('blog_title', $context, $blocks);
         echo "</h2>
                     <h3>";
-        // line 37
+        // line 36
         $this->displayBlock('blog_tagline', $context, $blocks);
         echo "</h3>
                 </hgroup>
@@ -70,29 +70,29 @@ class __TwigTemplate_9caff6098a2ae522808d0393879bcdf0db0ca130bd14ff33e9704f18646
 
             <section class=\"main-col\">
                 ";
-        // line 42
+        // line 41
         $this->displayBlock('body', $context, $blocks);
-        // line 43
+        // line 42
         echo "            </section>
             <aside class=\"sidebar\">
                 ";
-        // line 45
+        // line 44
         $this->displayBlock('sidebar', $context, $blocks);
-        // line 46
+        // line 45
         echo "            </aside>
 
             <div id=\"footer\">
                 ";
-        // line 49
+        // line 48
         $this->displayBlock('footer', $context, $blocks);
-        // line 52
+        // line 51
         echo "            </div>
         </section>
 
         ";
-        // line 55
+        // line 54
         $this->displayBlock('javascripts', $context, $blocks);
-        // line 56
+        // line 55
         echo "    </body>
 </html>";
     }
@@ -122,47 +122,56 @@ class __TwigTemplate_9caff6098a2ae522808d0393879bcdf0db0ca130bd14ff33e9704f18646
         // line 23
         echo "                        <nav>
                             <ul class=\"navigation\">
-                                <li><a href=\"#\">Home</a></li>
-                                <li><a href=\"#\">About</a></li>
                                 <li><a href=\"#\">Theory</a></li>
                                 <li><a href=\"#\">Tools</a></li>
-                                <li><a href=\"#\">Contact</a></li>
+                                <li><a href=\"";
+        // line 27
+        echo $this->env->getExtension('routing')->getPath("mp_default_about");
+        echo "\">About</a></li>
+                                <li><a href=\"";
+        // line 28
+        echo $this->env->getExtension('routing')->getPath("mp_default_contact");
+        echo "\">Contact</a></li>
                             </ul>
                         </nav>
                     ";
     }
 
-    // line 36
+    // line 35
     public function block_blog_title($context, array $blocks = array())
     {
-        echo "<a href=\"#\">Music portal</a>";
+        echo "<a href=\"";
+        echo $this->env->getExtension('routing')->getPath("mp_default_homepage");
+        echo "\">Music portal</a>";
     }
 
-    // line 37
+    // line 36
     public function block_blog_tagline($context, array $blocks = array())
     {
-        echo "<a href=\"#\">Learn music from its roots</a>";
+        echo "<a href=\"";
+        echo $this->env->getExtension('routing')->getPath("mp_default_homepage");
+        echo "\">Learn music from its roots</a>";
     }
 
-    // line 42
+    // line 41
     public function block_body($context, array $blocks = array())
     {
     }
 
-    // line 45
+    // line 44
     public function block_sidebar($context, array $blocks = array())
     {
     }
 
-    // line 49
+    // line 48
     public function block_footer($context, array $blocks = array())
     {
-        // line 50
+        // line 49
         echo "                    Music Portal - created by <a href=\"http://breezy-studios.com\">Breezy Studios</a>
                 ";
     }
 
-    // line 55
+    // line 54
     public function block_javascripts($context, array $blocks = array())
     {
     }
@@ -179,6 +188,6 @@ class __TwigTemplate_9caff6098a2ae522808d0393879bcdf0db0ca130bd14ff33e9704f18646
 
     public function getDebugInfo()
     {
-        return array (  166 => 55,  161 => 50,  158 => 49,  153 => 45,  148 => 42,  142 => 37,  136 => 36,  123 => 23,  120 => 22,  114 => 13,  110 => 11,  107 => 10,  101 => 6,  96 => 56,  94 => 55,  89 => 52,  87 => 49,  82 => 46,  80 => 45,  76 => 43,  74 => 42,  66 => 37,  62 => 36,  57 => 33,  55 => 22,  44 => 15,  42 => 10,  35 => 6,  31 => 3,  28 => 1,);
+        return array (  175 => 54,  170 => 49,  167 => 48,  162 => 44,  157 => 41,  149 => 36,  141 => 35,  133 => 28,  129 => 27,  123 => 23,  120 => 22,  114 => 13,  110 => 11,  107 => 10,  101 => 6,  96 => 55,  94 => 54,  89 => 51,  87 => 48,  82 => 45,  80 => 44,  76 => 42,  74 => 41,  66 => 36,  62 => 35,  57 => 32,  55 => 22,  44 => 15,  42 => 10,  35 => 6,  28 => 1,);
     }
 }
