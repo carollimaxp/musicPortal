@@ -1,0 +1,7 @@
+parameters:
+#    mp_default.example.class: MP\DefaultBundle\Example
+
+services:
+#    mp_default.example:
+#        class: %mp_default.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

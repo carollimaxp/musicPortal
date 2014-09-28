@@ -1,0 +1,8 @@
+mp_default:
+    resource: "@MPDefaultBundle/Resources/config/routing.yml"
+    prefix:   /
+
+mp_theory:
+    resource: "@MPTheoryBundle/Resources/config/routing.yml"
+    prefix:   /
+
