@@ -2,9 +2,6 @@
 app/logs/*
 app/cache/*
 app/spool/*
-app/config/parameters.ini
-app/config/parameters.yml
-vendor/*
 web/uploads/*
 web/bundles/*
 web/css/*
