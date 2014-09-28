@@ -2719,10 +2719,6 @@
         <argument>Doctrine</argument>
       </call>
       <call method="addPath">
-        <argument>C:\xampp\htdocs\musicPortal\src\MP\TheoryBundle/Resources/views</argument>
-        <argument>MPTheory</argument>
-      </call>
-      <call method="addPath">
         <argument>C:\xampp\htdocs\musicPortal\src\MP\DefaultBundle/Resources/views</argument>
         <argument>MPDefault</argument>
       </call>

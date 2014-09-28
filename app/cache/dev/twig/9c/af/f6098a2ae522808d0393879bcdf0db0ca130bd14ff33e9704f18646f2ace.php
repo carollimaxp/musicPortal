@@ -124,11 +124,11 @@ class __TwigTemplate_9caff6098a2ae522808d0393879bcdf0db0ca130bd14ff33e9704f18646
                             <ul class=\"navigation\">
                                 <li><a href=\"";
         // line 25
-        echo $this->env->getExtension('routing')->getPath("mp_theory_homepage");
+        echo $this->env->getExtension('routing')->getPath("mp_default_homepage");
         echo "\">Home</a></li>
                                 <li><a href=\"";
         // line 26
-        echo $this->env->getExtension('routing')->getPath("mp_theory_about");
+        echo $this->env->getExtension('routing')->getPath("mp_default_about");
         echo "\">About</a></li>
                                 <li><a href=\"#\">Theory</a></li>
                                 <li><a href=\"#\">Tools</a></li>
@@ -142,7 +142,7 @@ class __TwigTemplate_9caff6098a2ae522808d0393879bcdf0db0ca130bd14ff33e9704f18646
     public function block_blog_title($context, array $blocks = array())
     {
         echo "<a href=\"";
-        echo $this->env->getExtension('routing')->getPath("mp_theory_homepage");
+        echo $this->env->getExtension('routing')->getPath("mp_default_homepage");
         echo "\">Music portal</a>";
     }
 
@@ -150,7 +150,7 @@ class __TwigTemplate_9caff6098a2ae522808d0393879bcdf0db0ca130bd14ff33e9704f18646
     public function block_blog_tagline($context, array $blocks = array())
     {
         echo "<a href=\"";
-        echo $this->env->getExtension('routing')->getPath("mp_theory_homepage");
+        echo $this->env->getExtension('routing')->getPath("mp_default_homepage");
         echo "\">Learn music from its roots</a>";
     }
 

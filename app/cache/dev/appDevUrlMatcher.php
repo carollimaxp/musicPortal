@@ -135,27 +135,38 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
 
         }
 
-        // mp_theory_homepage
+        // mp_default_homepage
         if ($pathinfo === '/theory') {
             if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
                 $allow = array_merge($allow, array('GET', 'HEAD'));
-                goto not_mp_theory_homepage;
+                goto not_mp_default_homepage;
             }
 
-            return array (  '_controller' => 'MP\\DefaultBundle\\Controller\\DefaultController::indexAction',  '_route' => 'mp_theory_homepage',);
+            return array (  '_controller' => 'MP\\DefaultBundle\\Controller\\DefaultController::indexAction',  '_route' => 'mp_default_homepage',);
         }
-        not_mp_theory_homepage:
+        not_mp_default_homepage:
 
-        // mp_theory_about
+        // mp_default_about
         if ($pathinfo === '/about') {
             if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
                 $allow = array_merge($allow, array('GET', 'HEAD'));
-                goto not_mp_theory_about;
+                goto not_mp_default_about;
             }
 
-            return array (  '_controller' => 'MP\\DefaultBundle\\Controller\\DefaultController::aboutAction',  '_route' => 'mp_theory_about',);
+            return array (  '_controller' => 'MP\\DefaultBundle\\Controller\\DefaultController::aboutAction',  '_route' => 'mp_default_about',);
         }
-        not_mp_theory_about:
+        not_mp_default_about:
+
+        // mp_default_contact
+        if ($pathinfo === '/contact') {
+            if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                $allow = array_merge($allow, array('GET', 'HEAD'));
+                goto not_mp_default_contact;
+            }
+
+            return array (  '_controller' => 'BloggerBlogBundle:Page:contact',  '_route' => 'mp_default_contact',);
+        }
+        not_mp_default_contact:
 
         // _welcome
         if (rtrim($pathinfo, '/') === '') {
