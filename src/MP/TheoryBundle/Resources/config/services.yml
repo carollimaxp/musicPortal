@@ -1,0 +1,7 @@
+parameters:
+#    mp_theory.example.class: MP\TheoryBundle\Example
+
+services:
+#    mp_theory.example:
+#        class: %mp_theory.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
