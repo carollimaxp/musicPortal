@@ -1,0 +1,11 @@
+mp_theory_homepage:
+    pattern:  /theory
+    defaults: { _controller: MPDefaultBundle:Default:index }
+    requirements:
+        _method:  GET
+        
+mp_theory_about:
+    pattern:  /about
+    defaults: { _controller: MPDefaultBundle:Default:about }
+    requirements:
+        _method:  GET

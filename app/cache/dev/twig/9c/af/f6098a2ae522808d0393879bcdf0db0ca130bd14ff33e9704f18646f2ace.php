@@ -122,8 +122,14 @@ class __TwigTemplate_9caff6098a2ae522808d0393879bcdf0db0ca130bd14ff33e9704f18646
         // line 23
         echo "                        <nav>
                             <ul class=\"navigation\">
-                                <li><a href=\"#\">Home</a></li>
-                                <li><a href=\"#\">About</a></li>
+                                <li><a href=\"";
+        // line 25
+        echo $this->env->getExtension('routing')->getPath("mp_theory_homepage");
+        echo "\">Home</a></li>
+                                <li><a href=\"";
+        // line 26
+        echo $this->env->getExtension('routing')->getPath("mp_theory_about");
+        echo "\">About</a></li>
                                 <li><a href=\"#\">Theory</a></li>
                                 <li><a href=\"#\">Tools</a></li>
                                 <li><a href=\"#\">Contact</a></li>
@@ -135,13 +141,17 @@ class __TwigTemplate_9caff6098a2ae522808d0393879bcdf0db0ca130bd14ff33e9704f18646
     // line 36
     public function block_blog_title($context, array $blocks = array())
     {
-        echo "<a href=\"#\">Music portal</a>";
+        echo "<a href=\"";
+        echo $this->env->getExtension('routing')->getPath("mp_theory_homepage");
+        echo "\">Music portal</a>";
     }
 
     // line 37
     public function block_blog_tagline($context, array $blocks = array())
     {
-        echo "<a href=\"#\">Learn music from its roots</a>";
+        echo "<a href=\"";
+        echo $this->env->getExtension('routing')->getPath("mp_theory_homepage");
+        echo "\">Learn music from its roots</a>";
     }
 
     // line 42
@@ -179,6 +189,6 @@ class __TwigTemplate_9caff6098a2ae522808d0393879bcdf0db0ca130bd14ff33e9704f18646
 
     public function getDebugInfo()
     {
-        return array (  166 => 55,  161 => 50,  158 => 49,  153 => 45,  148 => 42,  142 => 37,  136 => 36,  123 => 23,  120 => 22,  114 => 13,  110 => 11,  107 => 10,  101 => 6,  96 => 56,  94 => 55,  89 => 52,  87 => 49,  82 => 46,  80 => 45,  76 => 43,  74 => 42,  66 => 37,  62 => 36,  57 => 33,  55 => 22,  44 => 15,  42 => 10,  35 => 6,  28 => 1,);
+        return array (  176 => 55,  171 => 50,  168 => 49,  163 => 45,  158 => 42,  150 => 37,  142 => 36,  131 => 26,  127 => 25,  123 => 23,  120 => 22,  114 => 13,  110 => 11,  107 => 10,  101 => 6,  96 => 56,  94 => 55,  89 => 52,  87 => 49,  82 => 46,  80 => 45,  76 => 43,  74 => 42,  66 => 37,  62 => 36,  57 => 33,  55 => 22,  44 => 15,  42 => 10,  35 => 6,  28 => 1,);
     }
 }

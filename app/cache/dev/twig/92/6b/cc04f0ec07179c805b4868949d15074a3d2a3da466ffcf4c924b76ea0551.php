@@ -28,9 +28,7 @@ class __TwigTemplate_926bcc04f0ec07179c805b4868949d15074a3d2a3da466ffcf4c924b76e
     public function block_body($context, array $blocks = array())
     {
         // line 3
-        echo "    Here be ";
-        echo twig_escape_filter($this->env, (isset($context["var1"]) ? $context["var1"] : $this->getContext($context, "var1")), "html", null, true);
-        echo "
+        echo "    Here be dragons
 ";
     }
 

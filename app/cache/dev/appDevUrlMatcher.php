@@ -136,9 +136,26 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
         }
 
         // mp_theory_homepage
-        if (0 === strpos($pathinfo, '/theory') && preg_match('#^/theory/(?P<var1>[^/]++)$#s', $pathinfo, $matches)) {
-            return $this->mergeDefaults(array_replace($matches, array('_route' => 'mp_theory_homepage')), array (  '_controller' => 'MP\\TheoryBundle\\Controller\\DefaultController::indexAction',));
+        if ($pathinfo === '/theory') {
+            if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                $allow = array_merge($allow, array('GET', 'HEAD'));
+                goto not_mp_theory_homepage;
+            }
+
+            return array (  '_controller' => 'MP\\DefaultBundle\\Controller\\DefaultController::indexAction',  '_route' => 'mp_theory_homepage',);
         }
+        not_mp_theory_homepage:
+
+        // mp_theory_about
+        if ($pathinfo === '/about') {
+            if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                $allow = array_merge($allow, array('GET', 'HEAD'));
+                goto not_mp_theory_about;
+            }
+
+            return array (  '_controller' => 'MP\\DefaultBundle\\Controller\\DefaultController::aboutAction',  '_route' => 'mp_theory_about',);
+        }
+        not_mp_theory_about:
 
         // _welcome
         if (rtrim($pathinfo, '/') === '') {
