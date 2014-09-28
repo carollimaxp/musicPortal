@@ -15,4 +15,9 @@ class DefaultController extends Controller
      
         return $this->render('MPDefaultBundle:StaticPages:about.html.twig');
     }
+    
+    public function contactAction () {
+        
+        return $this->render('MPDefaultBundle:StaticPages:contact.html.twig');
+    }
 }

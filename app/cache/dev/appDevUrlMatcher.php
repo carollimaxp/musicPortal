@@ -157,6 +157,17 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
         }
         not_mp_theory_about:
 
+        // mp_theory_contact
+        if ($pathinfo === '/contact') {
+            if (!in_array($this->context->getMethod(), array('GET', 'HEAD'))) {
+                $allow = array_merge($allow, array('GET', 'HEAD'));
+                goto not_mp_theory_contact;
+            }
+
+            return array (  '_controller' => 'MP\\DefaultBundle\\Controller\\DefaultController::contactAction',  '_route' => 'mp_theory_contact',);
+        }
+        not_mp_theory_contact:
+
         // _welcome
         if (rtrim($pathinfo, '/') === '') {
             if (substr($pathinfo, -1) !== '/') {

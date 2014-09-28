@@ -2309,7 +2309,9 @@
       <argument type="service">
         <service class="Doctrine\ORM\Configuration" public="false">
           <call method="setEntityNamespaces">
-            <argument type="collection"/>
+            <argument type="collection">
+              <argument key="MPDefaultBundle">MP\DefaultBundle\Entity</argument>
+            </argument>
           </call>
           <call method="setMetadataCacheImpl">
             <argument type="service">
@@ -2340,7 +2342,19 @@
           </call>
           <call method="setMetadataDriverImpl">
             <argument type="service">
-              <service class="Doctrine\ORM\Mapping\Driver\DriverChain" public="false"/>
+              <service class="Doctrine\ORM\Mapping\Driver\DriverChain" public="false">
+                <call method="addDriver">
+                  <argument type="service">
+                    <service class="Doctrine\ORM\Mapping\Driver\AnnotationDriver" public="false">
+                      <argument type="service" id="annotation_reader"/>
+                      <argument type="collection">
+                        <argument>C:\xampp\htdocs\musicPortal\src\MP\DefaultBundle\Entity</argument>
+                      </argument>
+                    </service>
+                  </argument>
+                  <argument>MP\DefaultBundle\Entity</argument>
+                </call>
+              </service>
             </argument>
           </call>
           <call method="setProxyDir">
@@ -2717,10 +2731,6 @@
       <call method="addPath">
         <argument>C:\xampp\htdocs\musicPortal\vendor\doctrine\doctrine-bundle\Doctrine\Bundle\DoctrineBundle/Resources/views</argument>
         <argument>Doctrine</argument>
-      </call>
-      <call method="addPath">
-        <argument>C:\xampp\htdocs\musicPortal\src\MP\TheoryBundle/Resources/views</argument>
-        <argument>MPTheory</argument>
       </call>
       <call method="addPath">
         <argument>C:\xampp\htdocs\musicPortal\src\MP\DefaultBundle/Resources/views</argument>
